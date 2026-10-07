@@ -1,0 +1,383 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String
+  name          String
+  role          String    @default("STAFF")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  leads         Lead[]    @relation("SalesOwner")
+  picLeads      Lead[]    @relation("LeadPIC")
+  opportunities Opportunity[]
+  tasks         Task[]    @relation("AssignedTasks")
+  activities    Activity[] @relation("AssignedActivities")
+  quotations    Quotation[]
+}
+
+model ProductCategory {
+  id          String    @id @default(uuid())
+  name        String
+  description String?
+
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Product {
+  id                  String               @id @default(uuid())
+  sku                 String               @unique
+  name                String
+  categoryId          String
+  category            ProductCategory      @relation(fields: [categoryId], references: [id])
+  description         String?
+  specification       String?
+  unit                String
+  basePrice           Float
+  minimumPrice        Float
+  image               String?
+  datasheet           String?
+  active              Boolean              @default(true)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  opportunityProducts OpportunityProduct[]
+  quotationItems      QuotationItem[]
+}
+
+model Company {
+  id            String    @id @default(uuid())
+  name          String
+  legalName     String?
+  industry      String?
+  website       String?
+  phone         String?
+  email         String?
+  address       String?
+  city          String?
+  province      String?
+  country       String?
+  npwp          String?
+  companySize   String?
+  status        String    @default("PROSPECT")
+  accountOwnerId String?
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  contacts      Contact[]
+  leads         Lead[]
+  opportunities Opportunity[]
+  quotations    Quotation[]
+  tasks         Task[]
+  activities    Activity[]
+  documents     Document[]
+}
+
+model Contact {
+  id               String    @id @default(uuid())
+  companyId        String
+  company          Company   @relation(fields: [companyId], references: [id])
+  name             String
+  position         String?
+  department       String?
+  phone            String?
+  whatsapp         String?
+  email            String?
+  linkedin         String?
+  role             String?
+  decisionMaker    Boolean   @default(false)
+  influencer       Boolean   @default(false)
+  technicalContact Boolean   @default(false)
+  financeContact   Boolean   @default(false)
+  notes            String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  leads            Lead[]
+  opportunities    Opportunity[]
+  quotations       Quotation[]
+  tasks            Task[]
+  activities       Activity[]
+  documents        Document[]
+}
+
+model Lead {
+  id                   String      @id @default(uuid())
+  companyId            String?
+  company              Company?    @relation(fields: [companyId], references: [id])
+  contactId            String?
+  contact              Contact?    @relation(fields: [contactId], references: [id])
+  companyName          String
+  contactName          String
+  position             String?
+  phone                String?
+  whatsapp             String?
+  email                String?
+  website              String?
+  address              String?
+  city                 String?
+  province             String?
+  industry             String?
+  companySize          String?
+  source               String?
+  channel              String?
+  productInterest      String?
+  projectName          String?
+  projectLocation      String?
+  estimatedValue       Float?
+  expectedPurchaseDate DateTime?
+  temperature          String      @default("COLD")
+  status               String      @default("NEW")
+  salesOwnerId         String?
+  salesOwner           User?       @relation("SalesOwner", fields: [salesOwnerId], references: [id])
+  picId                String?
+  pic                  User?       @relation("LeadPIC", fields: [picId], references: [id])
+  notes                String?
+  lastContact          DateTime?
+  nextFollowUp         DateTime?
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+
+  leadActivities       LeadActivity[]
+  documents            Document[]
+  campaignLeads        CampaignLead[]
+}
+
+model LeadActivity {
+  id          String      @id @default(uuid())
+  leadId      String
+  lead        Lead        @relation(fields: [leadId], references: [id])
+  type        String
+  date        DateTime    @default(now())
+  description String?
+  direction   String      @default("OUTBOUND")
+
+  createdAt   DateTime    @default(now())
+}
+
+model PipelineStage {
+  id            String        @id @default(uuid())
+  name          String
+  order         Int           @default(0)
+  probability   Int           @default(0)
+  opportunities Opportunity[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Opportunity {
+  id               String        @id @default(uuid())
+  name             String
+  companyId        String
+  company          Company       @relation(fields: [companyId], references: [id])
+  contactId        String?
+  contact          Contact?      @relation(fields: [contactId], references: [id])
+  projectName      String?
+  projectLocation  String?
+  estimatedValue   Float         @default(0)
+  probability      Int           @default(0)
+  expectedClosing  DateTime?
+  stageId          String?
+  stage            PipelineStage? @relation(fields: [stageId], references: [id])
+  salesOwnerId     String
+  salesOwner       User          @relation(fields: [salesOwnerId], references: [id])
+  competitor       String?
+  requirement      String?
+  notes            String?
+  isWon            Boolean       @default(false)
+  isLost           Boolean       @default(false)
+  lostReasonId     String?
+  lostReason       LostReason?   @relation(fields: [lostReasonId], references: [id])
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  products         OpportunityProduct[]
+  quotations       Quotation[]
+  activities       Activity[]
+  tasks            Task[]
+  documents        Document[]
+}
+
+model OpportunityProduct {
+  id            String      @id @default(uuid())
+  opportunityId String
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id])
+  productId     String
+  product       Product     @relation(fields: [productId], references: [id])
+  quantity      Int         @default(1)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Quotation {
+  id             String          @id @default(uuid())
+  quotationNumber String         @unique
+  date           DateTime        @default(now())
+  validUntil     DateTime
+  companyId      String
+  company        Company         @relation(fields: [companyId], references: [id])
+  contactId      String?
+  contact        Contact?        @relation(fields: [contactId], references: [id])
+  opportunityId  String?
+  opportunity    Opportunity?    @relation(fields: [opportunityId], references: [id])
+  salespersonId  String
+  salesperson    User            @relation(fields: [salespersonId], references: [id])
+  paymentTerms   String?
+  deliveryTerms  String?
+  notes          String?
+  status         String          @default("DRAFT")
+  subtotal       Float           @default(0)
+  discount       Float           @default(0)
+  tax            Float           @default(0)
+  grandTotal     Float           @default(0)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  items          QuotationItem[]
+  documents      Document[]
+}
+
+model QuotationItem {
+  id          String    @id @default(uuid())
+  quotationId String
+  quotation   Quotation @relation(fields: [quotationId], references: [id])
+  productId   String
+  product     Product   @relation(fields: [productId], references: [id])
+  description String?
+
+  quantity    Int       @default(1)
+  unit        String
+  unitPrice   Float     @default(0)
+  discount    Float     @default(0)
+  tax         Float     @default(0)
+  subtotal    Float     @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Activity {
+  id            String       @id @default(uuid())
+  type          String
+  date          DateTime
+  time          DateTime?
+  companyId     String?
+  company       Company?     @relation(fields: [companyId], references: [id])
+  contactId     String?
+  contact       Contact?     @relation(fields: [contactId], references: [id])
+  opportunityId String?
+  opportunity   Opportunity? @relation(fields: [opportunityId], references: [id])
+  description   String
+  result        String?
+  nextFollowUp  DateTime?
+  assignedUserId String
+  assignedUser  User         @relation("AssignedActivities", fields: [assignedUserId], references: [id])
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model Task {
+  id            String      @id @default(uuid())
+  title         String
+  description   String?
+  assignedUserId String
+  assignedUser  User        @relation("AssignedTasks", fields: [assignedUserId], references: [id])
+  dueDate       DateTime?
+  priority      String      @default("MEDIUM")
+  status        String      @default("TODO")
+  companyId     String?
+  company       Company?    @relation(fields: [companyId], references: [id])
+  contactId     String?
+  contact       Contact?    @relation(fields: [contactId], references: [id])
+  opportunityId String?
+  opportunity   Opportunity? @relation(fields: [opportunityId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Campaign {
+  id          String         @id @default(uuid())
+  name        String
+  platform    String
+  startDate   DateTime?
+  endDate     DateTime?
+  budget      Float?
+  notes       String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  leads       CampaignLead[]
+}
+
+model CampaignLead {
+  id         String   @id @default(uuid())
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id])
+  leadId     String
+  lead       Lead     @relation(fields: [leadId], references: [id])
+  createdAt  DateTime @default(now())
+}
+
+model Document {
+  id            String       @id @default(uuid())
+  filename      String
+  type          String
+  size          Int
+  url           String
+  uploadedBy    String
+  uploadDate    DateTime     @default(now())
+  companyId     String?
+  company       Company?     @relation(fields: [companyId], references: [id])
+  contactId     String?
+  contact       Contact?     @relation(fields: [contactId], references: [id])
+  leadId        String?
+  lead          Lead?        @relation(fields: [leadId], references: [id])
+  opportunityId String?
+  opportunity   Opportunity? @relation(fields: [opportunityId], references: [id])
+  quotationId   String?
+  quotation     Quotation?   @relation(fields: [quotationId], references: [id])
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LostReason {
+  id            String        @id @default(uuid())
+  code          String        @unique
+  name          String
+  description   String?
+  opportunities Opportunity[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  action    String
+  entity    String
+  entityId  String
+  oldValue  String?
+  newValue  String?
+  createdAt DateTime @default(now())
+}
