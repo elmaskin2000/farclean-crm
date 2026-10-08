@@ -50,7 +50,11 @@ export default async function LeadDetailPage({ params }: { params: { id: string 
                   <div className="font-medium">{lead.productInterest || '-'}</div>
                 </div>
                 <div>
-                  <div className="text-sm text-gray-500">Source (Dapat dr mn)</div>
+                  <div>
+                  <div className="text-sm text-gray-500">Tanggal Lead Masuk</div>
+                  <div className="font-medium text-purple-700">{lead.inquiryDate ? format(new Date(lead.inquiryDate), 'dd MMM yyyy') : format(new Date(lead.createdAt), 'dd MMM yyyy')}</div>
+                </div>
+                <div className="text-sm text-gray-500">Source (Dapat dr mn)</div>
                   <div className="font-medium text-blue-700">{lead.source || '-'}</div>
                 </div>
                 <div>

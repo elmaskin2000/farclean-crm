@@ -148,6 +148,7 @@ model Lead {
   notes                String?
   lastContact          DateTime?
   nextFollowUp         DateTime?
+  inquiryDate          DateTime?   @default(now())
   createdAt            DateTime    @default(now())
   updatedAt            DateTime    @updatedAt
 
@@ -282,6 +283,7 @@ model Activity {
   description   String
   result        String?
   nextFollowUp  DateTime?
+  inquiryDate          DateTime?   @default(now())
   assignedUserId String
   assignedUser  User         @relation("AssignedActivities", fields: [assignedUserId], references: [id])
   createdAt     DateTime     @default(now())

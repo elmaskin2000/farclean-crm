@@ -53,12 +53,26 @@ export async function createLead(formData: FormData) {
   const temperature = formData.get('temperature') as string
   const salesOwnerId = formData.get('salesOwnerId') as string
   const picId = formData.get('picId') as string
+  const inquiryDateStr = formData.get('inquiryDate') as string
 
   if (!companyName || !contactName) throw new Error('Validation failed')
 
   const actor = (await getServerSession(authOptions))?.user?.name || 'System';
+  
+  const inquiryDate = inquiryDateStr ? new Date(inquiryDateStr) : new Date();
+
   const lead = await prisma.lead.create({
-    data: { companyName, contactName, productInterest, temperature, salesOwnerId: salesOwnerId || null, picId: picId || null, source, channel },
+    data: { 
+      companyName, 
+      contactName, 
+      productInterest, 
+      temperature, 
+      salesOwnerId: salesOwnerId || null, 
+      picId: picId || null, 
+      source, 
+      channel,
+      inquiryDate 
+    },
   })
 
   await logAudit(actor, 'CREATE_LEAD', 'Lead', lead.id, 'New lead created');

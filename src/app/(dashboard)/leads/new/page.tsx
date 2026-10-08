@@ -35,7 +35,13 @@ export default async function NewLeadPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4 mb-4">
               <div className="space-y-2">
+                <Label htmlFor="inquiryDate">Tanggal Lead Masuk (Inquiry Date)</Label>
+                <Input type="date" id="inquiryDate" name="inquiryDate" defaultValue={new Date().toISOString().split('T')[0]} />
+              </div>
+            </div>
+            <div className="space-y-2">
                 <Label htmlFor="source">Source (Dapat dari mana)</Label>
                 <Input id="source" name="source" placeholder="e.g. Google Search, Referensi Teman" />
               </div>
