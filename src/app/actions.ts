@@ -47,6 +47,8 @@ export async function logAudit(userId: string, action: string, entity: string, e
 export async function createLead(formData: FormData) {
   const companyName = formData.get('companyName') as string
   const contactName = formData.get('contactName') as string
+  const phone = formData.get('phone') as string
+  const email = formData.get('email') as string
   const productInterest = formData.get('productInterest') as string
   const source = formData.get('source') as string
   const channel = formData.get('channel') as string
@@ -65,6 +67,8 @@ export async function createLead(formData: FormData) {
     data: { 
       companyName, 
       contactName, 
+      phone,
+      email,
       productInterest, 
       temperature, 
       salesOwnerId: salesOwnerId || null, 

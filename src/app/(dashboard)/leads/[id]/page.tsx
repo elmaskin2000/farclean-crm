@@ -46,8 +46,16 @@ export default async function LeadDetailPage({ params }: { params: { id: string 
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <div className="text-sm text-gray-500">Contact Person</div>
-                  <div className="font-medium">{lead.contactName}</div>
-                </div>
+                    <div className="font-medium">{lead.contactName}</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-500">No. WA / Telepon</div>
+                    <div className="font-medium">{lead.phone || '-'}</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-500">Email</div>
+                    <div className="font-medium">{lead.email || '-'}</div>
+                  </div>
                 <div>
                   <div className="text-sm text-gray-500">Product Interest</div>
                   <div className="font-medium">{lead.productInterest || '-'}</div>
