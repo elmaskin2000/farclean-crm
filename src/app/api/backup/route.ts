@@ -105,7 +105,7 @@ export async function GET() {
       status: 200,
       headers: {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'Content-Disposition': \`attachment; filename="Farclean_CRM_FullBackup_\${timestamp}.xlsx"\`,
+        'Content-Disposition': `attachment; filename="Farclean_CRM_FullBackup_${timestamp}.xlsx"`,
       },
     })
   } catch (error: any) {
