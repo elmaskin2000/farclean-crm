@@ -7,6 +7,9 @@ import { format } from 'date-fns'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
+export const dynamic = 'force-dynamic'
+
+
 export default async function LeadsPage() {
   const session = await getServerSession(authOptions)
   const user = session?.user

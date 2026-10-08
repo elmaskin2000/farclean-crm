@@ -5,6 +5,9 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { format } from 'date-fns'
 
+export const dynamic = 'force-dynamic'
+
+
 export default async function QuotationsIndexPage() {
   const quotations = await prisma.quotation.findMany({
     orderBy: { createdAt: 'desc' },

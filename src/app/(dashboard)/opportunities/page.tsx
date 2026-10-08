@@ -6,6 +6,9 @@ import Link from 'next/link'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
+export const dynamic = 'force-dynamic'
+
+
 export default async function OpportunitiesPage() {
   const session = await getServerSession(authOptions)
   const user = session?.user

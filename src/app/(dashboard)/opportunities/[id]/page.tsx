@@ -6,6 +6,9 @@ import { createQuotation, updateOpportunityStage } from '@/app/actions/quote'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+
+
 export default async function OpportunityDetailPage({ params }: { params: { id: string } }) {
   const { id } = await params
   const opp = await prisma.opportunity.findUnique({

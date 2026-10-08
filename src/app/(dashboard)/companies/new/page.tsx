@@ -4,6 +4,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
+export const dynamic = 'force-dynamic'
+
+
 export default function NewCompanyPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-6">

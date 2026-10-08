@@ -4,6 +4,9 @@ import { prisma } from '@/lib/prisma'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { format } from 'date-fns'
 
+export const dynamic = 'force-dynamic'
+
+
 const STAGES = [
   'NEW',
   'CONTACTED',

@@ -5,6 +5,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
+export const dynamic = 'force-dynamic'
+
+
 export default async function NewLeadPage() {
   const users = await prisma.user.findMany({ where: { role: 'SALES' }, orderBy: { name: 'asc' } })
   const allUsers = await prisma.user.findMany({ orderBy: { name: 'asc' } })

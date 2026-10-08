@@ -9,6 +9,9 @@ import { format } from 'date-fns'
 import Link from 'next/link'
 import PrintButton from '@/components/features/PrintButton'
 
+export const dynamic = 'force-dynamic'
+
+
 export default async function QuotationPage({ params }: { params: { id: string } }) {
   const { id } = await params
   const quotation = await prisma.quotation.findUnique({

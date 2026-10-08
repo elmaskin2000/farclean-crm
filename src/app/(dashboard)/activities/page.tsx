@@ -4,6 +4,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge'
 import { format } from 'date-fns'
 
+export const dynamic = 'force-dynamic'
+
+
 export default async function ActivitiesPage() {
   const activities = await prisma.leadActivity.findMany({
     orderBy: { createdAt: 'desc' },

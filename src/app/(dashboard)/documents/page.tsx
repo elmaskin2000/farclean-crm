@@ -7,6 +7,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { uploadDocument, deleteDocument } from '@/app/actions/document'
 import { format } from 'date-fns'
 
+export const dynamic = 'force-dynamic'
+
+
 export default async function DocumentsPage() {
   const documents = await prisma.document.findMany({
     orderBy: { createdAt: 'desc' },

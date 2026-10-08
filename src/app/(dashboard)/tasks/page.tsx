@@ -6,6 +6,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { createTask, updateTaskStatus } from '@/app/actions/task'
 
+export const dynamic = 'force-dynamic'
+
+
 export default async function TasksPage() {
   const tasks = await prisma.task.findMany({
     include: { assignedUser: true },

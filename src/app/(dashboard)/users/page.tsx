@@ -7,6 +7,9 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import { deleteUser } from '@/app/actions/user'
 
+export const dynamic = 'force-dynamic'
+
+
 export default async function UsersPage() {
   const users = await prisma.user.findMany({
     orderBy: { createdAt: 'desc' }
