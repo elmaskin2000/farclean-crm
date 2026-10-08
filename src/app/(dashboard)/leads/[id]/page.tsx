@@ -39,8 +39,11 @@ export default async function LeadDetailPage({ params }: { params: { id: string 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
           <Card>
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle>Lead Details</CardTitle>
+              <Link href={`/leads/${id}/edit`}>
+                <Button variant="outline" size="sm">Edit</Button>
+              </Link>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
