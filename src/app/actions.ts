@@ -183,6 +183,7 @@ export async function updateLead(formData: FormData) {
   const phone = formData.get('phone') as string;
   const email = formData.get('email') as string;
   const productInterest = formData.get('productInterest') as string;
+  const notes = formData.get('notes') as string;
   const inquiryDateStr = formData.get('inquiryDate') as string;
   const source = formData.get('source') as string;
   const channel = formData.get('channel') as string;
