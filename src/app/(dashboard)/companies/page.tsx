@@ -4,7 +4,16 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+import { redirect } from 'next/navigation'
+
 export default async function CompaniesPage() {
+  const session = await getServerSession(authOptions)
+  if (session?.user?.role !== 'ADMIN' && session?.user?.role !== 'MANAGER') {
+    redirect('/dashboard')
+  }
+
   const companies = await prisma.company.findMany({
     orderBy: { createdAt: 'desc' },
   })

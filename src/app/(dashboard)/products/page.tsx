@@ -4,7 +4,16 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+import { redirect } from 'next/navigation'
+
 export default async function ProductsPage() {
+  const session = await getServerSession(authOptions)
+  if (session?.user?.role !== 'ADMIN' && session?.user?.role !== 'MANAGER') {
+    redirect('/dashboard')
+  }
+
   const products = await prisma.product.findMany({
     include: { category: true },
     orderBy: { name: 'asc' }

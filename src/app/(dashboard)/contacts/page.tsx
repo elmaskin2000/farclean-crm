@@ -3,7 +3,16 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import Link from 'next/link'
 
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+import { redirect } from 'next/navigation'
+
 export default async function ContactsPage() {
+  const session = await getServerSession(authOptions)
+  if (session?.user?.role !== 'ADMIN' && session?.user?.role !== 'MANAGER') {
+    redirect('/dashboard')
+  }
+
   const contacts = await prisma.contact.findMany({
     orderBy: { createdAt: 'desc' },
     include: { company: true },

@@ -5,8 +5,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -158,7 +159,7 @@ model Lead {
 model LeadActivity {
   id          String      @id @default(uuid())
   leadId      String
-  lead        Lead        @relation(fields: [leadId], references: [id])
+  lead        Lead        @relation(fields: [leadId], references: [id], onDelete: Cascade)
   type        String
   date        DateTime    @default(now())
   description String?
@@ -213,7 +214,7 @@ model Opportunity {
 model OpportunityProduct {
   id            String      @id @default(uuid())
   opportunityId String
-  opportunity   Opportunity @relation(fields: [opportunityId], references: [id])
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
   productId     String
   product       Product     @relation(fields: [productId], references: [id])
   quantity      Int         @default(1)
@@ -231,7 +232,7 @@ model Quotation {
   contactId      String?
   contact        Contact?        @relation(fields: [contactId], references: [id])
   opportunityId  String?
-  opportunity    Opportunity?    @relation(fields: [opportunityId], references: [id])
+  opportunity    Opportunity?    @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
   salespersonId  String
   salesperson    User            @relation(fields: [salespersonId], references: [id])
   paymentTerms   String?
@@ -252,7 +253,7 @@ model Quotation {
 model QuotationItem {
   id          String    @id @default(uuid())
   quotationId String
-  quotation   Quotation @relation(fields: [quotationId], references: [id])
+  quotation   Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade)
   productId   String
   product     Product   @relation(fields: [productId], references: [id])
   description String?
@@ -277,7 +278,7 @@ model Activity {
   contactId     String?
   contact       Contact?     @relation(fields: [contactId], references: [id])
   opportunityId String?
-  opportunity   Opportunity? @relation(fields: [opportunityId], references: [id])
+  opportunity   Opportunity? @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
   description   String
   result        String?
   nextFollowUp  DateTime?
@@ -301,7 +302,7 @@ model Task {
   contactId     String?
   contact       Contact?    @relation(fields: [contactId], references: [id])
   opportunityId String?
-  opportunity   Opportunity? @relation(fields: [opportunityId], references: [id])
+  opportunity   Opportunity? @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
@@ -324,7 +325,7 @@ model CampaignLead {
   campaignId String
   campaign   Campaign @relation(fields: [campaignId], references: [id])
   leadId     String
-  lead       Lead     @relation(fields: [leadId], references: [id])
+  lead       Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
   createdAt  DateTime @default(now())
 }
 
@@ -341,11 +342,11 @@ model Document {
   contactId     String?
   contact       Contact?     @relation(fields: [contactId], references: [id])
   leadId        String?
-  lead          Lead?        @relation(fields: [leadId], references: [id])
+  lead          Lead?        @relation(fields: [leadId], references: [id], onDelete: Cascade)
   opportunityId String?
-  opportunity   Opportunity? @relation(fields: [opportunityId], references: [id])
+  opportunity   Opportunity? @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
   quotationId   String?
-  quotation     Quotation?   @relation(fields: [quotationId], references: [id])
+  quotation     Quotation?   @relation(fields: [quotationId], references: [id], onDelete: Cascade)
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 }
