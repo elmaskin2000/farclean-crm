@@ -50,6 +50,7 @@ export async function createLead(formData: FormData) {
   const phone = formData.get('phone') as string
   const email = formData.get('email') as string
   const productInterest = formData.get('productInterest') as string
+  const notes = formData.get('notes') as string
   const source = formData.get('source') as string
   const channel = formData.get('channel') as string
   const temperature = formData.get('temperature') as string
@@ -75,6 +76,7 @@ export async function createLead(formData: FormData) {
       picId: picId || null, 
       source, 
       channel,
+      notes,
       inquiryDate 
     },
   })
@@ -199,6 +201,7 @@ export async function updateLead(formData: FormData) {
       productInterest,
       source,
       channel,
+      notes,
       ...(inquiryDate && { inquiryDate })
     }
   });

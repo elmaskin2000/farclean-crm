@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { updateLeadStatus, addLeadActivity, convertAction, deleteLeadActivity } from '@/app/actions'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import AiInsightWidget from '@/components/leads/AiInsightWidget'
 import { format } from 'date-fns'
 import { MessageSquare, Phone, Mail, Calendar, ArrowRight, Trash2 } from 'lucide-react'
 
@@ -83,8 +84,16 @@ export default async function LeadDetailPage({ params }: { params: { id: string 
                 <div>
                   <div className="text-sm text-gray-500">Created At</div>
                   <div className="font-medium">{format(new Date(lead.createdAt), 'PPP')}</div>
+                  </div>
                 </div>
-              </div>
+                {lead.notes && (
+                  <div className="mt-4 pt-4 border-t">
+                    <div className="text-sm text-gray-500 mb-1">Catatan (Notes)</div>
+                    <div className="text-sm whitespace-pre-wrap">{lead.notes}</div>
+                  </div>
+                )}
+                
+                <AiInsightWidget lead={lead} />
             </CardContent>
           </Card>
 
