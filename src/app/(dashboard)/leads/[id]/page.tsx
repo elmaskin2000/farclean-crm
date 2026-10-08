@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { updateLeadStatus, addLeadActivity, convertAction } from '@/app/actions'
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 import { format } from 'date-fns'
 import { MessageSquare, Phone, Mail, Calendar, ArrowRight } from 'lucide-react'
 
