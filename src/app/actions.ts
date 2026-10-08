@@ -208,3 +208,21 @@ export async function updateLead(formData: FormData) {
   revalidatePath('/leads');
   redirect(`/leads/${id}`);
 }
+
+export async function deleteLeadActivity(formData: FormData) {
+  const session = await getServerSession(authOptions);
+  if (!session) throw new Error('Unauthorized');
+  const actor = session.user.name || 'System';
+
+  const id = formData.get('id') as string;
+  const leadId = formData.get('leadId') as string;
+
+  if (!id) throw new Error('ID is required');
+
+  await prisma.leadActivity.delete({ where: { id } });
+
+  await logAudit(actor, 'DELETE_ACTIVITY', 'LeadActivity', id, 'Deleted activity message');
+  
+  if (leadId) revalidatePath(`/leads/${leadId}`);
+  revalidatePath('/activities');
+}

@@ -2,11 +2,11 @@ import { prisma } from '@/lib/prisma'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { updateLeadStatus, addLeadActivity, convertAction } from '@/app/actions'
+import { updateLeadStatus, addLeadActivity, convertAction, deleteLeadActivity } from '@/app/actions'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { format } from 'date-fns'
-import { MessageSquare, Phone, Mail, Calendar, ArrowRight } from 'lucide-react'
+import { MessageSquare, Phone, Mail, Calendar, ArrowRight, Trash2 } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -105,7 +105,17 @@ export default async function LeadDetailPage({ params }: { params: { id: string 
                             {act.type} {act.direction === 'INBOUND' ? '(Pesan dari Lead)' : '(Balasan Kita)'}
                           </span>
                         </div>
-                        <div className="text-sm whitespace-pre-wrap">{act.description}</div>
+                        <div className="text-sm whitespace-pre-wrap relative group">
+                            {act.description}
+                            
+                            <form action={deleteLeadActivity} className="absolute -top-6 right-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <input type="hidden" name="id" value={act.id} />
+                              <input type="hidden" name="leadId" value={lead.id} />
+                              <button type="submit" className="text-red-500 hover:text-red-700 bg-white rounded-full p-1 shadow" title="Hapus Pesan">
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                            </form>
+                          </div>
                         <div className={`text-[10px] mt-1 text-right ${act.direction === 'INBOUND' ? 'text-gray-400' : 'text-blue-200'}`}>
                           {format(new Date(act.createdAt), 'dd MMM yyyy, HH:mm')}
                         </div>
