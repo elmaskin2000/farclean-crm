@@ -112,7 +112,7 @@ export default async function DashboardPage() {
                       <tr key={lead.id} className="hover:bg-orange-50">
                         <td className="px-4 py-2 font-medium text-gray-900">{lead.companyName}</td>
                         <td className="px-4 py-2">
-                          <span className={\`px-2 py-1 rounded text-xs font-semibold \${lead.temperature === 'HOT' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'}\`}>
+                          <span className={`px-2 py-1 rounded text-xs font-semibold ${lead.temperature === 'HOT' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'}`}>
                             {lead.status} • {lead.temperature}
                           </span>
                         </td>
@@ -126,7 +126,7 @@ export default async function DashboardPage() {
                           </td>
                         )}
                         <td className="px-4 py-2 text-right">
-                          <Link href={\`/leads/\${lead.id}\`} className="text-blue-600 hover:underline font-medium">Buka Lead</Link>
+                          <Link href={`/leads/${lead.id}`} className="text-blue-600 hover:underline font-medium">Buka Lead</Link>
                         </td>
                       </tr>
                     ))}
